@@ -8,12 +8,12 @@ exports.connection = connection
 
 exports.createUser = (firstName, lastName, username, password, salt, email) => {
   return connection.query('INSERT INTO user (firstName, lastName, username, password, salt, email) VALUES (?, ?, ?, ?, ?, ?)',
-    {replacements: [firstName, lastName, username, password, salt, email], type: 'INSERT'});
+    {replacements: [firstName, lastName, username, password, salt, email], type: 'INSERT'})
 }
 
 exports.findUser = (username) => {
   return connection.query('SELECT * FROM user WHERE username = ?',
-    {replacements: [username], type: 'SELECT'});
+    {replacements: [username], type: 'SELECT'})
 }
 
 exports.saveUserExercise = (username, exercise) => {
@@ -22,8 +22,48 @@ exports.saveUserExercise = (username, exercise) => {
 }
 
 exports.getExercises = () => {
-    return connection.query('SELECT * FROM exercise', { type: connection.QueryTypes.SELECT})
+  return connection.query('SELECT * FROM exercise', { type: connection.QueryTypes.SELECT})
 }
+
+exports.filterByMuscle = (muscle) => {
+  return connection.query('SELECT * FROM exercise WHERE muscleGroup=?',
+  {replacements: [muscle], type: 'SELECT'})
+}
+
+exports.filterByType = (type) => {
+  return connection.query('SELECT * FROM exercise WHERE type=?',
+  {replacements: [type], type: 'SELECT'})
+}
+
+exports.addWorkout = (username, workoutName) => {
+  return exports.findUser(username)
+    .then((response)=> {
+      if (response.length === 0) {
+        throw error('user is not found')
+      }
+      let id = (response[0].user_id).toString()
+      return connection.query('INSERT INTO workout (name, userId) VALUES (?, ?)',
+      {replacements: [workoutName, id], type: 'INSERT'})
+    })
+    .catch((err) => {
+      console.log('Error workout to database', err)
+    })
+}
+
+exports.getWorkouts = (username) => {
+  return exports.findUser(username)
+    .then((response)=> {
+      if (response.length === 0) {
+        throw err('user is not found')
+      }
+      let id = (response[0].user_id).toString()
+      return connection.query('SELECT workout_id from workout WHERE userId=?',
+      {replacements:[id], type: 'SELECT'})
+    })
+    
+}
+
+
 
 exports.getUserExercise = (username) => {
   return exports.findUser(username)

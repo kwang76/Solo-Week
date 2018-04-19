@@ -22,19 +22,27 @@ CREATE TABLE exercise (
   PRIMARY KEY(exercise_id)
 );
 
-CREATE TABLE user_exercise(
-  user_id INT NOT NULL,
-  exercise_id INT NOT NULL,
-  PRIMARY KEY (user_id, exercise_id),
-  FOREIGN KEY (user_id) REFERENCES user (user_id),
-  FOREIGN KEY (exercise_id) REFERENCES exercise (exercise_id)
+-- CREATE TABLE user_exercise(
+--   user_id INT NOT NULL,
+--   exercise_id INT NOT NULL,
+--   PRIMARY KEY (user_id, exercise_id),
+--   FOREIGN KEY (user_id) REFERENCES user (user_id),
+--   FOREIGN KEY (exercise_id) REFERENCES exercise (exercise_id)
+-- );
+
+CREATE TABLE workout (
+  workout_id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255),
+  userId INT NOT NULL,
+  PRIMARY KEY(workout_id),
+  FOREIGN KEY (userID) REFERENCES user (user_id)
 );
 
-CREATE TABLE workout(
+CREATE TABLE workout_exercises (
+  id INT NOT NULL AUTO_INCREMENT,
+  exercise_id INT NOT NULL,
   workout_id INT NOT NULL,
-  userId INT NULL,
-  exerciseId INT NOT NULL,
-  PRIMARY KEY(workout_id),
-  FOREIGN KEY exerciseId REFERENCES exercise (exercise_id),
-  FOREIGN KEY userID REFERENCES user (user_id)
-)
+  PRIMARY KEY (id),
+  FOREIGN KEY (exercise_id) REFERENCES exercise (exercise_id) ON DELETE CASCADE,
+  FOREIGN KEY (workout_id) REFERENCES workout (workout_id) ON DELETE CASCADE
+);

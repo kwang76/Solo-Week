@@ -98,25 +98,11 @@ app.post('/logout', (req, res) => {
   res.send('You were logged out')
 })
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'))
-})
+
 
 /*
 ==================================================================================================
 */
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 app.post('/addExercise', function(req, res) {
@@ -126,18 +112,69 @@ app.post('/addExercise', function(req, res) {
 app.get('/exercises', function(req, res) {
   db.getExercises()
     .then((response)=> {
-      console.log('response from db is', response)
       res.send(response)
     })
     .catch((err) =>{
       console.log('Error in getting exercises in server')
+      res.send('failed')
     })
 })
 
+app.post('/workout', function(req, res) {
+  var workoutName = req.body.workoutName
+  var username = req.session.user
+  console.log('in server my username is', req.session.user)
+  db.addWorkout(username, workoutName)
+    .then((response)=> {
+      console.log('my response from making a workout', response)
+      res.send(workoutName)
+    })
+    .catch((err)=> {
+      console.log('Error getting workout from database')
+    })
+})
 
+app.get('/getWorkouts', function(req, res) {
+  var username = req.session.user
+  db.getWorkouts(username)
+    .then((response)=> {
+      console.log('response from getting my workouts', response)
+      res.send(response)
+    })
+    .catch((err)=> {
+      console.log('could not get workouts from db')
+    })
+})
 
+/*==========================================================================================*/
 
+/*Filters*/
 
+app.post('/muscle', function(req, res) {
+  var muscle = req.body.muscle
+  db.filterByMuscle(muscle)
+    .then((response) => {
+      res.send(response)
+    })
+    .catch((err) => {
+      console.log('Error filtering by muscle in server', err)
+    })
+})
+
+app.post('/type', function(req, res) {
+  var type = req.body.type
+  db.filterByType(type)
+    .then((response) => {
+      res.send(response)
+    })
+    .catch((err) => {
+      console.log('Error filtering by type in server', err)
+    })
+})
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'))
+})
 
 const port = 3000
 

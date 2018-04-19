@@ -27,7 +27,14 @@ class Main extends React.Component{
     }
     return (
       <div>
-      <Search workouts={this.props.workouts} />
+      <Search exercises={this.props.exercises}
+       filterMuscle={this.props.filterMuscle}
+       filterType={this.props.filterType}
+       muscle={this.props.muscle}
+       createWorkout={this.props.createWorkout}
+       savedWorkouts={this.props.savedWorkouts}
+
+       />
       <WorkoutSchedule workouts={this.props.workouts}/>
       <DailyEntry />
       </div>

@@ -9,54 +9,60 @@ class Search extends React.Component{
       exercise: '',
       sets : '',
       reps: '',
-      muscle: '',
-      type: '',
+      workoutname: '',
+      selectedWorkout: '',
     }
-  
+
     this.handleSetChange = this.handleSetChange.bind(this)
     this.handleRepChange = this.handleRepChange.bind(this)
     this.handleExerciseChange = this.handleExerciseChange.bind(this)
-    this.handleMuscleChange = this.handleMuscleChange.bind(this)
-    this.handleTypeChange = this.handleTypeChange.bind(this)
+    this.handleWorkoutNameChange = this.handleWorkoutNameChange.bind(this)
   }
 
   handleExerciseChange(e) {
     this.setState({
       exercise: e.target.value
-    }, ()=> console.log(this.state.exercise))
+    })
   }
 
   handleSetChange(e) {
     this.setState({
       sets: e.target.value
-    }, ()=> console.log(this.state.sets))
+    })
   }
 
   handleRepChange(e) {
     this.setState({
       reps: e.target.value
-    }, ()=> console.log(this.state.reps))
+    })
   }
 
-  handleMuscleChange(e) {
+  handleWorkoutNameChange(e){
     this.setState({
-      muscle: e.target.value
-    }, ()=> console.log(this.state.muscle))
-  }
-
-  handleTypeChange(e) {
-    this.setState({
-      type: e.target.value
-    }, ()=> console.log(this.state.type))
+      workoutname: e.target.value
+    })
   }
 
   render() {
+    let muscles = this.props.exercises.reduce((acc, workout) => {
+      if (!acc.includes(workout.muscleGroup)) {
+        acc.push(workout.muscleGroup)
+      }
+      return acc
+    }, []);
+    let types = this.props.exercises.reduce((acc, workout)=> {
+      if (!acc.includes(workout.type)) {
+        acc.push(workout.type)
+      }
+      return acc
+    }, [])
+
     return(
       <div>
         <label>
           Exercises
           <select value={this.state.exercise} onChange={this.handleExerciseChange}>
-            {this.props.workouts.map((exercise, i)=> {
+            {this.props.exercises.map((exercise, i)=> {
               return <option key={i} value={exercise.exerciseName}>{exercise.exerciseName}</option>
             })}
           </select>
@@ -64,18 +70,19 @@ class Search extends React.Component{
 
         <label>
           Muscle Group
-          <select value={this.state.muscle} onChange={this.handleMuscleChange}>
-            <option>Chest</option>
-            <option>Back</option>
-            <option>Legs</option>
+          <select value={this.props.muscle} onChange={(e)=> this.props.filterMuscle(e.target.value)}>
+            {muscles.map((muscle, i)=> {
+              return <option key={i}>{muscle}</option>
+            })}
           </select>
         </label>
 
         <label>
           Exercise Type
-          <select value={this.state.type} onChange={this.handleTypeChange}>
-            <option>Strength</option>
-            <option>Stretching</option>
+          <select value={this.state.type} onChange={(e)=> this.props.filterType(e.target.value)}>
+          {types.map((type, i)=> {
+            return <option key={i}>{type}</option>
+          })}
           </select>
         </label>
 
@@ -102,6 +109,18 @@ class Search extends React.Component{
         <br/>
         <br/>
         <button onClick={this.handleClick}>Add exercise to your workout</button>
+        <br/>
+        <br/>
+        <input value={this.state.workoutname} onChange={this.handleWorkoutNameChange} placeholder={'Name Your Workout'}/>
+        <br/>
+        <select value={this.state.selectedWorkout} onChange={this.handleWorkoutNameChange}>
+
+        {this.props.savedWorkouts.map((workout, i)=> {
+          return <option key={i}>{workout.workout_id}</option>
+        })}
+        </select>
+
+        <button onClick={()=> this.props.createWorkout(this.state.workoutname)}>Add your Workout</button>
       </div>
     )
   }
