@@ -35,7 +35,7 @@ class Main extends React.Component{
        savedWorkouts={this.props.savedWorkouts}
        handleWorkoutChange={this.props.handleWorkoutChange}
        />
-      <WorkoutsFeed workouts={this.props.savedWorkouts}/>
+      <WorkoutsFeed allWorkouts={this.props.allWorkouts}/>
       <br/>
       <button onClick={()=> this.props.handleLogout()}>Log Out</button>
       </div>

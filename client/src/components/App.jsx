@@ -19,7 +19,8 @@ class App extends React.Component{
       savedWorkouts: [],
       muscle: '',
       type: '',
-      userId: ''
+      userId: '',
+      allWorkouts: [],
     }
 
     this.handleRegister = this.handleRegister.bind(this)
@@ -30,11 +31,13 @@ class App extends React.Component{
     this.filterType = this.filterType.bind(this)
     this.createWorkout = this.createWorkout.bind(this)
     this.getWorkouts = this.getWorkouts.bind(this)
+    this.getStoredWorkouts = this.getStoredWorkouts.bind(this)
   }
 
   componentDidMount() {
     this.getExercises()
     this.getWorkouts()
+    this.getStoredWorkouts()
     console.log('checking if user is logged in')
     axios.get('/isloggedin')
     .then(({data}) => {
@@ -48,8 +51,9 @@ class App extends React.Component{
   filterType(type) {
     axios.post('/type', {type: type})
       .then((response) => {
-        console.log('response for filtering by type', response)
+        console.log(type)
         this.setState({
+
           exercises: response.data,
           type: type
         })
@@ -98,6 +102,19 @@ class App extends React.Component{
       })
       .catch((err)=> {
         console.log('Error retrieving saved workouts', err)
+      })
+  }
+
+  getStoredWorkouts() {
+    axios.get('/storedWorkouts')
+      .then((response)=> {
+        console.log('response from server from savedexercisesworkouts')
+        this.setState({
+          allWorkouts: response.data
+        }, ()=> console.log('all of users stored workouts are here', this.state.allWorkouts))
+      })
+      .catch((err)=> {
+        console.log('YOU DUN GOT NO EXERCISES IN YOUR WORKOUTS', err)
       })
   }
 
@@ -170,6 +187,7 @@ class App extends React.Component{
              createWorkout={this.createWorkout}
              savedWorkouts={this.state.savedWorkouts}
              handleLogout={this.handleLogout}
+             allWorkouts={this.state.allWorkouts}
             />}/>
 
           </div>

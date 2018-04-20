@@ -13,7 +13,9 @@ class WorkoutsFeed extends React.Component{
   render() {
     return(
       <div>
-
+      {this.props.allWorkouts.map((workout,i)=> {
+        return <li key={i}>{workout.exercise}{workout.sets}{workout.reps}</li>
+      })}
       </div>
     )
   }

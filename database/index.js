@@ -94,36 +94,36 @@ exports.addExerciseToWorkout = (exercise, sets, reps, workoutId) => {
   {replacements: [exercise], type: 'SELECT'})
   .then((exerciseId)=> {
     console.log(`what are we inserting to join table? workoutId: ${workoutId} sets: ${sets} reps: ${reps} exercise:${exerciseId[0].exercise_id}`)
-    return connection.query('INSERT INTO workout_exercises (workout_id, exercise_id, sets, reps) VALUES (?,?,?,?)',
-    {replacements: [workoutId, exerciseId[0].exercise_id, sets, reps], type: 'INSERT'})
+    return connection.query('INSERT INTO workout_exercises (workout_id, exercise_id, exercise, sets, reps) VALUES (?,?,?,?, ?)',
+    {replacements: [workoutId, exerciseId[0].exercise_id, exercise,sets, reps], type: 'INSERT'})
   })
   .catch((err)=> {
     console.log('There was an error adding exercise to join table', err)
   })
 }
 
-// exports.getWorkouts = (username) => {
-//   return exports.findUser(username)
-//     .then((response)=> {
-//       if (response.length === 0) {
-//         throw error('user is not found')
-//       }
-//       let id = (response[0].user_id).toString()
-//       return connection.query('SELECT workout_id FROM workout WHERE userId=?',
-//       {replacements: [id], type: 'SELECT'})
-//     })
-//     .then((workoutIds)=> {
-//       console.log('all my workout ids', workoutIds)
-//       return Promise.all(workoutIds.map((workout)=> {
-//         let id = workout.workout_id
-//         return connection.query('SELECT * FROM workout_exercises WHERE workout_id=?',
-//         {replacements: [id], type: 'SELECT'})
-//       }))
-//     })
-//     .catch((err)=> {
-//       console.log('ERROR RETRIEIVING WORKOUTS FOR INDIVIDUAL')
-//     })
-// }
+exports.getStoredWorkouts = (username) => {
+  return exports.findUser(username)
+    .then((response)=> {
+      if (response.length === 0) {
+        throw error('user is not found')
+      }
+      let id = (response[0].user_id).toString()
+      return connection.query('SELECT workout_id FROM workout WHERE userId=?',
+      {replacements: [id], type: 'SELECT'})
+    })
+    .then((workoutIds)=> {
+      console.log('all my workout ids', workoutIds)
+      return Promise.all(workoutIds.map((workout)=> {
+        let id = workout.workout_id
+        return connection.query('SELECT * FROM workout_exercises WHERE workout_id=?',
+        {replacements: [id], type: 'SELECT'})
+      }))
+    })
+    .catch((err)=> {
+      console.log('ERROR RETRIEIVING WORKOUTS FOR INDIVIDUAL')
+    })
+}
 
 
 

@@ -6,11 +6,12 @@ class Search extends React.Component{
     super(props)
 
     this.state = {
-      exercise: '',
-      sets : '',
-      reps: '',
+      exercise: this.props.exercises[0],
+      sets : 1,
+      reps: 1,
       workoutname: '',
       selectedWorkout: this.props.savedWorkouts[0],
+      name: '',
     }
 
     this.handleSetChange = this.handleSetChange.bind(this)
@@ -55,7 +56,8 @@ class Search extends React.Component{
     })[0];
 
     this.setState({
-      selectedWorkout: selectedWorkout
+      selectedWorkout: selectedWorkout,
+      name: e.target.value
     }, ()=> console.log('currently selected workout', this.state.selectedWorkout))
   }
 
@@ -75,18 +77,6 @@ class Search extends React.Component{
 
 
   render() {
-    let muscles = this.props.exercises.reduce((acc, workout) => {
-      if (!acc.includes(workout.muscleGroup)) {
-        acc.push(workout.muscleGroup)
-      }
-      return acc
-    }, []);
-    let types = this.props.exercises.reduce((acc, workout)=> {
-      if (!acc.includes(workout.type)) {
-        acc.push(workout.type)
-      }
-      return acc
-    }, [])
 
     return(
       <div>
@@ -102,18 +92,17 @@ class Search extends React.Component{
         <label>
           Muscle Group
           <select value={this.props.muscle} onChange={(e)=> this.props.filterMuscle(e.target.value)}>
-            {muscles.map((muscle, i)=> {
-              return <option key={i}>{muscle}</option>
-            })}
+            <option>Chest</option>
+            <option>Back</option>
+            <option>Legs</option>
           </select>
         </label>
 
         <label>
           Exercise Type
           <select value={this.state.type} onChange={(e)=> this.props.filterType(e.target.value)}>
-          {types.map((type, i)=> {
-            return <option key={i}>{type}</option>
-          })}
+            <option>Strength</option>
+            <option>Stretching</option>
           </select>
         </label>
 
@@ -147,11 +136,10 @@ class Search extends React.Component{
         <br/>
         <label>
         Select which workout to add exercise to
-          <select value={this.state.selectedWorkout} onChange={this.handleWorkoutChange}>
+          <select value={this.state.name} onChange={this.handleWorkoutChange}>
           {this.props.savedWorkouts.map((workout, i)=> {
-            return <option id={workout} key={i}>{workout.name}</option>
+            return <option key={i}>{workout.name}</option>
           })}
-
           </select>
         </label>
 
@@ -164,7 +152,27 @@ class Search extends React.Component{
 
 export default Search
 
+// let muscles = this.props.exercises.reduce((acc, workout) => {
+//   if (!acc.includes(workout.muscleGroup)) {
+//     acc.push(workout.muscleGroup)
+//   }
+//   return acc
+// }, []);
+// let types = this.props.exercises.reduce((acc, workout)=> {
+//   if (!acc.includes(workout.type)) {
+//     acc.push(workout.type)
+//   }
+//   return acc
+// }, [])
 
+
+// {muscles.map((muscle, i)=> {
+//   return <option key={i}>{muscle}</option>
+// })}
+
+// {types.map((type, i)=> {
+//   return <option key={i}>{type}</option>
+// })}
 //FIX FILTERING, AFTER SELECTING ONE OPTION IT SHOULD BE ABLE TO RESHOW ALL OF THEM
 //FIX THE FORMAT FOR GETTING DATA BACK FOR SAVED WORKOUTS
 //MODIFY WHAT RAHUL DID WITH THE SEARCH,
