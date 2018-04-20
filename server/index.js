@@ -20,6 +20,9 @@ app.get('/isloggedin', (req, res) => {
   res.send(!!req.session && !!req.session.user)
 })
 
+//checks if a user by requested username exists in the database
+  //if not takes in requsted password, adds a salt, and hashes the pw
+  //takes necessary information and creates a user by inserting information into db
 app.post('/signup', (req, res) => {
   let firstName = req.body.firstName
   let lastName = req.body.lastName
@@ -65,6 +68,9 @@ app.post('/signup', (req, res) => {
     })
 })
 
+//logs a user in by taking in username and password
+  //matches the hashed submitted password to the stored hash in db
+  //will generate a session based off comparison
 app.post('/login', (req, res) => {
   let username = req.body.username
   let password = req.body.password
@@ -97,6 +103,7 @@ app.post('/login', (req, res) => {
     })
 })
 
+//handles logging out
 app.post('/logout', (req, res) => {
   if (req.session === undefined || req.session.user === undefined) {
     res.send('Cannot logout without an active session')
@@ -106,11 +113,7 @@ app.post('/logout', (req, res) => {
   res.send('Bye! You were logged out')
 })
 
-
-
-/*
-==================================================================================================
-*/
+//==================================================================================================
 
 //get all exercises from static db
 app.get('/exercises', function(req, res) {
@@ -125,7 +128,7 @@ app.get('/exercises', function(req, res) {
     })
 })
 
-//adds a workout
+//adds a workout to the database
 app.post('/workout', function(req, res) {
   var workoutName = req.body.workoutName
   var username = req.session.user
@@ -133,6 +136,7 @@ app.post('/workout', function(req, res) {
   db.addWorkout(username, workoutName)
     .then((response)=> {
       console.log('my response from making a workout', response)
+      //sends back a workout_id and name so it can be retrieved later
       res.send(JSON.stringify({userId: response[0], workoutName: workoutName}))
     })
     .catch((err)=> {
@@ -140,7 +144,7 @@ app.post('/workout', function(req, res) {
     })
 })
 
-//retrieves all the workouts saved by a user
+//retrieves the workout_ids and names for a user
 app.get('/getWorkouts', function(req, res) {
   var username = req.session.user
   db.getWorkouts(username)
@@ -152,7 +156,7 @@ app.get('/getWorkouts', function(req, res) {
       console.log('could not get workouts from db', err)
     })
 })
-
+//adds an exercise to a specific workout
 app.post('/exerciseToWorkout', function(req, res){
   var exercise = req.body.exercise
   var sets = req.body.sets
@@ -166,6 +170,7 @@ app.post('/exerciseToWorkout', function(req, res){
     })
 })
 
+//retrieves all workouts for a user
 app.get('/storedWorkouts', function(req, res) {
   var username = req.session.user
   db.getStoredWorkouts(username)
@@ -178,13 +183,19 @@ app.get('/storedWorkouts', function(req, res) {
     })
 })
 
-/*==========================================================================================*/
+//=========================================================================================
 
 /*Filters*/
 
 //filters the exercises by selected muscle
 app.post('/muscle', function(req, res) {
   var muscle = req.body.muscle
+  if (muscle === 'All') {
+    db.getExercises()
+      .then((response)=> {
+        res.send(response)
+      })
+  } else {
   db.filterByMuscle(muscle)
     .then((response) => {
       res.send(response)
@@ -192,6 +203,7 @@ app.post('/muscle', function(req, res) {
     .catch((err) => {
       console.log('Error filtering by muscle in server', err)
     })
+  }
 })
 
 //filters the exercises by selected muscle type

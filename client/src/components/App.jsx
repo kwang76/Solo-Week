@@ -7,7 +7,7 @@ import Login from './Login.jsx'
 import Search from './Search.jsx'
 import Main from './Main.jsx'
 import WorkoutFeed from './WorkoutsFeed.jsx'
-import DailyEntry from './DailyEntry.jsx'
+import WorkoutEntry from './WorkoutEntry.jsx'
 
 class App extends React.Component{
   constructor(props) {
@@ -51,9 +51,7 @@ class App extends React.Component{
   filterType(type) {
     axios.post('/type', {type: type})
       .then((response) => {
-        console.log(type)
         this.setState({
-
           exercises: response.data,
           type: type
         })
@@ -83,7 +81,6 @@ class App extends React.Component{
         console.log('response in get exercises',response)
         this.setState({
           exercises: response.data,
-          muscle: response.data[0].muscleGroup,
           type: response.data[0].type
         })
       })
@@ -178,7 +175,8 @@ class App extends React.Component{
             <Route exact={true} path='/' component={(props)=><Redirect {...props} to='/signup'/>}/>
             <Route path='/signup' component={(props) => <SignUp {...props} isLoggedIn={this.state.isLoggedIn} handleRegister={this.handleRegister} />}/>
             <Route path='/login' component={(props) => <Login {...props}  isLoggedIn={this.state.isLoggedIn} handleLogin={this.handleLogin} />}/>
-            <Route path='/main' component={(props)=> <Main {...props} savedWorkouts={this.state.savedWorkouts}
+            <Route path='/main' component={(props)=> <Main {...props}
+             savedWorkouts={this.state.savedWorkouts}
              handleLogout={this.handleLogout}
              exercises={this.state.exercises}
              filterMuscle={this.filterMuscle}

@@ -75,9 +75,7 @@ class Search extends React.Component{
       })
   }
 
-
   render() {
-
     return(
       <div>
         <label>
@@ -92,17 +90,23 @@ class Search extends React.Component{
         <label>
           Muscle Group
           <select value={this.props.muscle} onChange={(e)=> this.props.filterMuscle(e.target.value)}>
+            <option>All</option>
             <option>Chest</option>
             <option>Back</option>
+            <option>Shoulders</option>
+            <option>Biceps</option>
+            <option>Triceps</option>
             <option>Legs</option>
           </select>
         </label>
 
         <label>
           Exercise Type
-          <select value={this.state.type} onChange={(e)=> this.props.filterType(e.target.value)}>
+          <select value={this.props.type} onChange={(e)=> this.props.filterType(e.target.value)}>
+            <option>All</option>
             <option>Strength</option>
-            <option>Stretching</option>
+            <option>Stretch</option>
+            <option>Cardio</option>
           </select>
         </label>
 
@@ -146,8 +150,6 @@ class Search extends React.Component{
       </div>
     )
   }
-
-
 }
 
 export default Search

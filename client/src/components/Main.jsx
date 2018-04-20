@@ -4,21 +4,11 @@ import axios from 'axios'
 import Login from './Login.jsx'
 import Search from './Search.jsx'
 import WorkoutsFeed from './WorkoutsFeed.jsx'
-import DailyEntry from './DailyEntry.jsx'
+import WorkoutEntry from './WorkoutEntry.jsx'
 
 class Main extends React.Component{
   constructor(props) {
     super(props)
-
-    this.state = {
-
-    }
-    this.handleLogout = props.handleLogout
-    this.sendToLogin = this.sendToLogin.bind(this)
-  }
-
-  sendToLogin() {
-    this.props.history.push('/login')
   }
 
   render() {
