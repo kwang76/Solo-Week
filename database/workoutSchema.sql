@@ -40,8 +40,10 @@ CREATE TABLE workout (
 
 CREATE TABLE workout_exercises (
   id INT NOT NULL AUTO_INCREMENT,
-  exercise_id INT NOT NULL,
   workout_id INT NOT NULL,
+  exercise_id INT NOT NULL,
+  sets INT NOT NULL,
+  reps INT NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (exercise_id) REFERENCES exercise (exercise_id) ON DELETE CASCADE,
   FOREIGN KEY (workout_id) REFERENCES workout (workout_id) ON DELETE CASCADE

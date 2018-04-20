@@ -6,7 +6,7 @@ import SignUp from './SignUp.jsx'
 import Login from './Login.jsx'
 import Search from './Search.jsx'
 import Main from './Main.jsx'
-import WorkoutSchedule from './WorkoutSchedule.jsx'
+import WorkoutFeed from './WorkoutsFeed.jsx'
 import DailyEntry from './DailyEntry.jsx'
 
 class App extends React.Component{
@@ -18,7 +18,8 @@ class App extends React.Component{
       exercises: [],
       savedWorkouts: [],
       muscle: '',
-      type: ''
+      type: '',
+      userId: ''
     }
 
     this.handleRegister = this.handleRegister.bind(this)
@@ -36,9 +37,11 @@ class App extends React.Component{
     this.getWorkouts()
     console.log('checking if user is logged in')
     axios.get('/isloggedin')
-    .then((response) => {
-      console.log('user is logged in: ', response.data);
-      this.setState({isLoggedIn: response.data});
+    .then(({data}) => {
+      console.log('user is logged in: ', data);
+      this.setState({
+        isLoggedIn: data
+      });
     })
   }
 
@@ -91,7 +94,7 @@ class App extends React.Component{
         console.log('response for workouts from server', response)
         this.setState({
           savedWorkouts: response.data
-        }, ()=> console.log(this.state.savedWorkouts))
+        }, ()=> console.log('saved workouts', this.state.savedWorkouts))
       })
       .catch((err)=> {
         console.log('Error retrieving saved workouts', err)
@@ -108,36 +111,31 @@ class App extends React.Component{
       })
   }
 
-  addExercise(exercise, sets, reps) {
-    axios.post('/addExercise', {exercise: exercise, sets:sets, reps: reps})
-      .then((response)=> {
-
-      })
-  }
 
   handleLogin(username, password, cb) {
     console.log('attempting to login with credentails', username, password);
     axios.post('/login', {username: username, password: password})
-      .then((logInResponse) => {
-        console.log('Login reponse', logInResponse)
+      .then(({data}) => {
         this.setState({
-          isLoggedIn : true
-        });
+          isLoggedIn : true,
+          userId: data
+        }, ()=> console.log(this.state.isLoggedIn));
         cb();
+        //am i redirecting before the state is set to true?
       })
       .catch((err)=> {
-        console.log('There was an error signing in')
+        console.log('There was an error signing in', err)
       })
   }
 
   handleRegister(firstName, lastName, username, password, email, cb) {
     axios.post('/signup', {firstName: firstName, lastName: lastName, username: username, password: password, email: email})
-      .then((registrationResponse) => {
-          console.log('registration response from signing up', registrationResponse)
-          this.setState({
-          isLoggedIn: true
-        })
-        cb();
+      .then(({data}) => {
+        this.setState({
+          isLoggedIn: true,
+          userId: data
+        }, cb())
+
       })
       .catch((err)=> {
         console.log("There was an error registering user", err)
@@ -147,7 +145,10 @@ class App extends React.Component{
   handleLogout() {
     axios.post('/logout')
     .then(res => {
-      this.setState({isLoggedIn: false});
+      console.log(res)
+      this.setState({
+        isLoggedIn: false
+      }, ()=> console.log('login status:', this.state.isLoggedIn));
     })
   }
 
@@ -168,7 +169,9 @@ class App extends React.Component{
              muscle={this.state.muscle}
              createWorkout={this.createWorkout}
              savedWorkouts={this.state.savedWorkouts}
+             handleLogout={this.handleLogout}
             />}/>
+
           </div>
         </Router>
       </div>

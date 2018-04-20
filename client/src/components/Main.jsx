@@ -3,7 +3,7 @@ import { Redirect, Route, Link, Switch } from 'react-router-dom'
 import axios from 'axios'
 import Login from './Login.jsx'
 import Search from './Search.jsx'
-import WorkoutSchedule from './WorkoutSchedule.jsx'
+import WorkoutsFeed from './WorkoutsFeed.jsx'
 import DailyEntry from './DailyEntry.jsx'
 
 class Main extends React.Component{
@@ -22,7 +22,7 @@ class Main extends React.Component{
   }
 
   render() {
-    if (this.props.isLoggedIn) {
+    if (this.props.isLoggedIn === true) {
       return <Redirect to='/login' />
     }
     return (
@@ -33,10 +33,11 @@ class Main extends React.Component{
        muscle={this.props.muscle}
        createWorkout={this.props.createWorkout}
        savedWorkouts={this.props.savedWorkouts}
-
+       handleWorkoutChange={this.props.handleWorkoutChange}
        />
-      <WorkoutSchedule workouts={this.props.workouts}/>
-      <DailyEntry />
+      <WorkoutsFeed workouts={this.props.savedWorkouts}/>
+      <br/>
+      <button onClick={()=> this.props.handleLogout()}>Log Out</button>
       </div>
     )
   }

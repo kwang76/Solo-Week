@@ -33,6 +33,7 @@ app.post('/signup', (req, res) => {
   let salt
   db.findUser(username)
     .then((dbres) => {
+      console.log('response from database on find user', dbres)
       if (dbres.length > 0) {
         throw('Sorry username aleady exists')
       }
@@ -46,13 +47,16 @@ app.post('/signup', (req, res) => {
       return db.createUser(firstName, lastName, username, hash, salt, email)
     })
     .then((dbres) => {
+      console.log('after successfully storing using', dbres)
+      let userId = dbres[0]
       return req.session.regenerate((err) => {
         if (err) {
           console.log('Error regenerating the session')
         }
         req.session.user = username
+        console.log('the new session user is', req.session.user)
         console.log('User was successfully signed up', username)
-        res.send('User was signed up')
+        res.status(200).send(JSON.stringify(userId))
       });
     })
     .catch((err) => {
@@ -66,26 +70,30 @@ app.post('/login', (req, res) => {
   let password = req.body.password
 
   let hashedPassword
+  let id
   db.findUser(username)
     .then((dbRes) => {
+      console.log('response from log in check', dbRes )
       if (dbRes.length === 0) {
         throw('Username does not exist')
       }
       hashedPassword = dbRes[0].password
-      return bcrypt.hash(password, dbRes[0].salt)
+      id = dbRes[0].user_id
+      console.log('password being compared:', password)
+      return bcrypt.compare(password, hashedPassword)
     })
     .then((hashResult) => {
-      if (hashedPassword !== hashResult) {
-        throw('Sorry wrong password, try again')
+      console.log('my hash result', hashResult)
+      if (hashResult === true) {
+        req.session.regenerate(function(){
+          req.session.user = username
+          res.status(200).send(JSON.stringify(id))
+        })
       }
-      req.session.regenerate(function(){
-        req.session.user = username
-        res.send('Session was created')
-      });
     })
     .catch((err) => {
       console.error('There was an errror logging in', err)
-      res.send('Error logging in')
+      res.send('Sorry there was an error logging in')
     })
 })
 
@@ -95,7 +103,7 @@ app.post('/logout', (req, res) => {
     return;
   }
   req.session.destroy()
-  res.send('You were logged out')
+  res.send('Bye! You were logged out')
 })
 
 
@@ -104,14 +112,11 @@ app.post('/logout', (req, res) => {
 ==================================================================================================
 */
 
-
-app.post('/addExercise', function(req, res) {
-
-})
-
+//get all exercises from static db
 app.get('/exercises', function(req, res) {
   db.getExercises()
     .then((response)=> {
+      // console.log('my response from getting workouts', response)
       res.send(response)
     })
     .catch((err) =>{
@@ -120,6 +125,7 @@ app.get('/exercises', function(req, res) {
     })
 })
 
+//adds a workout
 app.post('/workout', function(req, res) {
   var workoutName = req.body.workoutName
   var username = req.session.user
@@ -127,29 +133,45 @@ app.post('/workout', function(req, res) {
   db.addWorkout(username, workoutName)
     .then((response)=> {
       console.log('my response from making a workout', response)
-      res.send(workoutName)
+      res.send(JSON.stringify({userId: response[0], workoutName: workoutName}))
     })
     .catch((err)=> {
       console.log('Error getting workout from database')
     })
 })
 
+//retrieves all the workouts saved by a user
 app.get('/getWorkouts', function(req, res) {
   var username = req.session.user
   db.getWorkouts(username)
     .then((response)=> {
-      console.log('response from getting my workouts', response)
+      console.log('RESPONSE FROM GETTING THE SAVED WORKOUTS', response)
       res.send(response)
     })
     .catch((err)=> {
-      console.log('could not get workouts from db')
+      console.log('could not get workouts from db', err)
     })
 })
+
+app.post('/exerciseToWorkout', function(req, res){
+  var exercise = req.body.exercise
+  var sets = req.body.sets
+  var reps = req.body.reps
+  var workoutId = req.body.workoutId
+  db.addExerciseToWorkout(exercise, sets, reps, workoutId)
+    .then((response)=> {
+      console.log('response in serving from adding exercise', response)
+      res.send(response)
+    })
+})
+
+
 
 /*==========================================================================================*/
 
 /*Filters*/
 
+//filters the exercises by selected muscle
 app.post('/muscle', function(req, res) {
   var muscle = req.body.muscle
   db.filterByMuscle(muscle)
@@ -161,6 +183,7 @@ app.post('/muscle', function(req, res) {
     })
 })
 
+//filters the exercises by selected muscle type
 app.post('/type', function(req, res) {
   var type = req.body.type
   db.filterByType(type)

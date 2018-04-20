@@ -43,11 +43,12 @@ class Login extends React.Component{
   }
 
   submitCredentials() {
-    this.handleLogin(this.state.username, this.state.password, ()=> {this.props.history.push('/main')})
+    this.handleLogin(this.state.username, this.state.password, ()=> {
+      this.props.history.push('/main')
+    })
   }
 
   render() {
-
     if (this.props.isLoggedIn) {
       return <Redirect to='/main' />
     }

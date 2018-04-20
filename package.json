@@ -1,13 +1,13 @@
 {
-  "name": "react-starter",
+  "name": "workout-planner",
   "version": "1.0.0",
-  "description": "React Starter",
+  "description": "Application that allows users to keep track of customized workouts, no more pen and paper",
   "main": "index.js",
   "scripts": {
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon server/index.js"
   },
-  "author": "Aaron Chan",
+  "author": "Kevin Wang",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.23.1",

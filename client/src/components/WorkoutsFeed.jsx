@@ -1,6 +1,6 @@
 import React from 'react'
 
-class WorkoutSchedule extends React.Component{
+class WorkoutsFeed extends React.Component{
   constructor(props) {
     super(props)
 
@@ -13,7 +13,7 @@ class WorkoutSchedule extends React.Component{
   render() {
     return(
       <div>
-        Each calendar day
+
       </div>
     )
   }
@@ -22,7 +22,7 @@ class WorkoutSchedule extends React.Component{
 
 }
 
-export default WorkoutSchedule
+export default WorkoutsFeed
 
 //most likely does not need state
 //will be like videolist from recastly

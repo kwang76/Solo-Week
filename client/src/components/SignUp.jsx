@@ -50,7 +50,7 @@ class SignUp extends React.Component {
     this.submit(this.state.firstName, this.state.lastName, this.state.username, this.state.password, this.state.email)
   }
 
-  submit(firstName, lastName, username, password, email) {
+  submit(firstName, lastName, username, password, email, cb) {
     this.handleRegister(firstName, lastName, username, password, email, ()=> {
       this.props.history.push('/main')
     })
@@ -83,6 +83,10 @@ class SignUp extends React.Component {
         <br/>
         <button onClick={this.handleClick}> Sign Me Up </button> <button onClick={this.sendToLogin}> Already a member? Log in Here</button>
         </div>
+        <br/>
+        <br/>
+        <br/>
+
       </div>
     )
 

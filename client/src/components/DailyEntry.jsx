@@ -12,7 +12,7 @@ class DailyEntry extends React.Component{
   render() {
     return(
       <div>
-        List of exercises for that day
+      
       </div>
     )
   }

@@ -10,13 +10,17 @@ class Search extends React.Component{
       sets : '',
       reps: '',
       workoutname: '',
-      selectedWorkout: '',
+      selectedWorkout: this.props.savedWorkouts[0],
     }
 
     this.handleSetChange = this.handleSetChange.bind(this)
     this.handleRepChange = this.handleRepChange.bind(this)
     this.handleExerciseChange = this.handleExerciseChange.bind(this)
     this.handleWorkoutNameChange = this.handleWorkoutNameChange.bind(this)
+    this.handleWorkoutChange = this.handleWorkoutChange.bind(this)
+
+    this.handleClick = this.handleClick.bind(this)
+    this.addExerciseToWorkout = this.addExerciseToWorkout.bind(this)
   }
 
   handleExerciseChange(e) {
@@ -42,6 +46,33 @@ class Search extends React.Component{
       workoutname: e.target.value
     })
   }
+
+  handleWorkoutChange(e) {
+    let selectedWorkout = this.props.savedWorkouts.filter((workout) => {
+      if (workout.name === e.target.value) {
+        return workout;
+      }
+    })[0];
+
+    this.setState({
+      selectedWorkout: selectedWorkout
+    }, ()=> console.log('currently selected workout', this.state.selectedWorkout))
+  }
+
+  handleClick() {
+    this.addExerciseToWorkout(this.state.exercise, this.state.sets, this.state.reps, this.state.selectedWorkout.workout_id)
+  }
+
+  addExerciseToWorkout(exercise, sets, reps, workoutId) {
+    axios.post('/exerciseToWorkout', {exercise: exercise, sets:sets, reps: reps, workoutId: workoutId})
+      .then((response)=> {
+        console.log('response from adding exercise to a workout', response)
+      })
+      .catch((err)=> {
+        console.log('error adding exercise to a workout', err)
+      })
+  }
+
 
   render() {
     let muscles = this.props.exercises.reduce((acc, workout) => {
@@ -111,16 +142,19 @@ class Search extends React.Component{
         <button onClick={this.handleClick}>Add exercise to your workout</button>
         <br/>
         <br/>
-        <input value={this.state.workoutname} onChange={this.handleWorkoutNameChange} placeholder={'Name Your Workout'}/>
+        <input value={this.state.workoutname} onChange={this.handleWorkoutNameChange} placeholder={'Create a New Workout'}/>
+        <button onClick={()=> this.props.createWorkout(this.state.workoutname)}>Add a Workout</button>
         <br/>
-        <select value={this.state.selectedWorkout} onChange={this.handleWorkoutNameChange}>
+        <label>
+        Select which workout to add exercise to
+          <select value={this.state.selectedWorkout} onChange={this.handleWorkoutChange}>
+          {this.props.savedWorkouts.map((workout, i)=> {
+            return <option id={workout} key={i}>{workout.name}</option>
+          })}
 
-        {this.props.savedWorkouts.map((workout, i)=> {
-          return <option key={i}>{workout.workout_id}</option>
-        })}
-        </select>
+          </select>
+        </label>
 
-        <button onClick={()=> this.props.createWorkout(this.state.workoutname)}>Add your Workout</button>
       </div>
     )
   }
@@ -131,4 +165,7 @@ class Search extends React.Component{
 export default Search
 
 
-//WORK ON A FILTER FEATURE SO THAT THE USER CAN CHOOSE FROM THE EXERCISE LIST BASED OFF OF MUSCLEGROUP/TYPE
+//FIX FILTERING, AFTER SELECTING ONE OPTION IT SHOULD BE ABLE TO RESHOW ALL OF THEM
+//FIX THE FORMAT FOR GETTING DATA BACK FOR SAVED WORKOUTS
+//MODIFY WHAT RAHUL DID WITH THE SEARCH,
+  //I THINK I CAN MODIFY THE SEARCH VALUE WITHIN SELECT TO USE AS QUERY
