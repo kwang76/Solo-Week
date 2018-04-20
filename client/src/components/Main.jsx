@@ -15,6 +15,7 @@ class Main extends React.Component{
     if (this.props.isLoggedIn === true) {
       return <Redirect to='/login' />
     }
+    console.log('my props', this.props.allWorkouts)
     return (
       <div>
       <Search exercises={this.props.exercises}
@@ -24,8 +25,11 @@ class Main extends React.Component{
        createWorkout={this.props.createWorkout}
        savedWorkouts={this.props.savedWorkouts}
        handleWorkoutChange={this.props.handleWorkoutChange}
+       getStoredWorkouts={this.props.getStoredWorkouts}
        />
-      <WorkoutsFeed allWorkouts={this.props.allWorkouts}/>
+      <br/>
+      <br/>
+      <WorkoutsFeed allWorkouts={this.props.allWorkouts} />
       <br/>
       <button onClick={()=> this.props.handleLogout()}>Log Out</button>
       </div>

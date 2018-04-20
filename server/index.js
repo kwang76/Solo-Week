@@ -162,8 +162,9 @@ app.post('/exerciseToWorkout', function(req, res){
   var sets = req.body.sets
   var reps = req.body.reps
   var workoutId = req.body.workoutId
+  var workoutName = req.body.workoutName
   console.log('my post body from adding exercise', req.body)
-  db.addExerciseToWorkout(exercise, sets, reps, workoutId)
+  db.addExerciseToWorkout(exercise, sets, reps, workoutId, workoutName)
     .then((response)=> {
       console.log('response in serving from adding exercise', response)
       res.send(response)
@@ -176,7 +177,7 @@ app.get('/storedWorkouts', function(req, res) {
   db.getStoredWorkouts(username)
     .then((response)=> {
       console.log('RESPONSE FROM GETTING WORKOUTS WITH EXERCISES', response)
-      res.send(response[0])
+      res.send(response)
     })
     .catch((err)=>{
       console.log('AHH I CAN\'T FIND MY WORKOUTS', err)

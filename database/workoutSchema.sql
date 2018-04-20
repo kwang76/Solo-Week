@@ -42,6 +42,7 @@ CREATE TABLE workout_exercises (
   id INT NOT NULL AUTO_INCREMENT,
   workout_id INT NOT NULL,
   exercise_id INT NOT NULL,
+  workoutName VARCHAR(255),
   exercise VARCHAR(255),
   sets INT NOT NULL,
   reps INT NOT NULL,

@@ -19,7 +19,6 @@ class Search extends React.Component{
     this.handleExerciseChange = this.handleExerciseChange.bind(this)
     this.handleWorkoutNameChange = this.handleWorkoutNameChange.bind(this)
     this.handleWorkoutChange = this.handleWorkoutChange.bind(this)
-
     this.handleClick = this.handleClick.bind(this)
     this.addExerciseToWorkout = this.addExerciseToWorkout.bind(this)
   }
@@ -62,13 +61,13 @@ class Search extends React.Component{
   }
 
   handleClick() {
-    this.addExerciseToWorkout(this.state.exercise, this.state.sets, this.state.reps, this.state.selectedWorkout.workout_id)
+    this.addExerciseToWorkout(this.state.exercise, this.state.sets, this.state.reps, this.state.selectedWorkout.workout_id, this.state.selectedWorkout.name)
   }
 
-  addExerciseToWorkout(exercise, sets, reps, workoutId) {
-    axios.post('/exerciseToWorkout', {exercise: exercise, sets:sets, reps: reps, workoutId: workoutId})
+  addExerciseToWorkout(exercise, sets, reps, workoutId, workoutName) {
+    axios.post('/exerciseToWorkout', {exercise: exercise, sets:sets, reps: reps, workoutId: workoutId, workoutName: workoutName})
       .then((response)=> {
-        console.log('response from adding exercise to a workout', response)
+        this.props.getStoredWorkouts()
       })
       .catch((err)=> {
         console.log('error adding exercise to a workout', err)
@@ -137,6 +136,7 @@ class Search extends React.Component{
         <br/>
         <input value={this.state.workoutname} onChange={this.handleWorkoutNameChange} placeholder={'Create a New Workout'}/>
         <button onClick={()=> this.props.createWorkout(this.state.workoutname)}>Add a Workout</button>
+        <br/>
         <br/>
         <label>
         Select which workout to add exercise to

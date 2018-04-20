@@ -105,13 +105,13 @@ class App extends React.Component{
   getStoredWorkouts() {
     axios.get('/storedWorkouts')
       .then((response)=> {
-        console.log('response from server from savedexercisesworkouts')
+        console.log('response from server from savedexercisesworkouts', response.data)
         this.setState({
           allWorkouts: response.data
         }, ()=> console.log('all of users stored workouts are here', this.state.allWorkouts))
       })
       .catch((err)=> {
-        console.log('YOU DUN GOT NO EXERCISES IN YOUR WORKOUTS', err)
+        console.log('Error getting saved workouts', err)
       })
   }
 
@@ -186,6 +186,7 @@ class App extends React.Component{
              savedWorkouts={this.state.savedWorkouts}
              handleLogout={this.handleLogout}
              allWorkouts={this.state.allWorkouts}
+             getStoredWorkouts={this.getStoredWorkouts}
             />}/>
 
           </div>

@@ -42,7 +42,7 @@ exports.getWorkouts = (username) => {
         throw err('user is not found')
       }
       let id = (response[0].user_id).toString()
-      return connection.query('SELECT workout_id, name from workout WHERE userId=?',
+      return connection.query('SELECT workout_id, name FROM workout WHERE userId=?',
       {replacements:[id], type: 'SELECT'})
     })
 
@@ -63,13 +63,13 @@ exports.addWorkout = (username, workoutName) => {
     })
 }
 
-exports.addExerciseToWorkout = (exercise, sets, reps, workoutId) => {
+exports.addExerciseToWorkout = (exercise, sets, reps, workoutId, workoutName) => {
   return connection.query('SELECT exercise_id FROM exercise WHERE exerciseName=?',
   {replacements: [exercise], type: 'SELECT'})
   .then((exerciseId)=> {
     console.log(`what are we inserting to join table? workoutId: ${workoutId} sets: ${sets} reps: ${reps} exercise:${exerciseId[0].exercise_id}`)
-    return connection.query('INSERT INTO workout_exercises (workout_id, exercise_id, exercise, sets, reps) VALUES (?,?,?,?, ?)',
-    {replacements: [workoutId, exerciseId[0].exercise_id, exercise,sets, reps], type: 'INSERT'})
+    return connection.query('INSERT INTO workout_exercises (workout_id, exercise_id, workoutName, exercise, sets, reps) VALUES (?,?,?,?,?,?)',
+    {replacements: [workoutId, exerciseId[0].exercise_id, workoutName, exercise,sets, reps], type: 'INSERT'})
   })
   .catch((err)=> {
     console.log('There was an error adding exercise to join table', err)

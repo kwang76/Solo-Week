@@ -1,16 +1,23 @@
 import React from 'react'
+import WorkoutEntry from './WorkoutEntry.jsx'
 
 const WorkoutsFeed = ({allWorkouts}) => {
   return(
     <div>
+
+
     {allWorkouts.map((workout,i)=> {
-      return <li key={i}>Exercise:{workout.exercise} Sets:{workout.sets} Repetitions:{workout.reps}</li>
+      return (<div key={i}>
+        <WorkoutEntry key={i} workout={workout}/><br/>
+        </div>)
     })}
+
     </div>
   )
 }
 
 export default WorkoutsFeed
+
 
 //most likely does not need state
 //will be like videolist from recastly
