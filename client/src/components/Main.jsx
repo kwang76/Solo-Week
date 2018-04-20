@@ -12,7 +12,7 @@ class Main extends React.Component{
   }
 
   render() {
-    if (this.props.isLoggedIn === true) {
+    if (this.props.isLoggedIn === false) {
       return <Redirect to='/login' />
     }
     console.log('my props', this.props.allWorkouts)

@@ -18,6 +18,8 @@ class Login extends React.Component{
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.submitCredentials = this.submitCredentials.bind(this)
+    this.handleSignUp = this.handleSignUp.bind(this)
+    this.sendToSignup = this.sendToSignup.bind(this)
   }
 
   onUsernameChange(e) {
@@ -48,6 +50,15 @@ class Login extends React.Component{
     })
   }
 
+  handleSignUp() {
+    this.sendToSignup()
+  }
+
+  sendToSignup() {
+    this.props.history.push('/signup')
+  }
+
+
   render() {
     if (this.props.isLoggedIn) {
       return <Redirect to='/main' />
@@ -61,7 +72,7 @@ class Login extends React.Component{
         <input value={this.state.password} onChange={this.onPasswordChange} onKeyPress={this.handleKeyPress} placeholder={'Password'} />
         <br/>
         <br/>
-        <button onClick={this.handleClick}>Login</button>
+        <button onClick={this.handleClick}>Login</button> <button onClick={this.handleSignUp}> New to us? Sign Up Here!</button>
       </div>
     )
   }

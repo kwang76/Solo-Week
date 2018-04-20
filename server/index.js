@@ -132,8 +132,12 @@ app.get('/exercises', function(req, res) {
 app.post('/workout', function(req, res) {
   var workoutName = req.body.workoutName
   var username = req.session.user
+  console.log('requested workoutname',req.body.workoutName)
   console.log('in server my username is', req.session.user)
-  db.addWorkout(username, workoutName)
+  if (req.body.workoutName.length === 0) {
+    res.status(400).send('Can\'t have unnamed workout')
+  } else {
+    db.addWorkout(username, workoutName)
     .then((response)=> {
       console.log('my response from making a workout', response)
       //sends back a workout_id and name so it can be retrieved later
@@ -142,6 +146,7 @@ app.post('/workout', function(req, res) {
     .catch((err)=> {
       console.log('Error getting workout from database')
     })
+  }
 })
 
 //retrieves the workout_ids and names for a user

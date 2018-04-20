@@ -23,7 +23,6 @@ class SignUp extends React.Component {
     this.onUserChange = this.onUserChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
     this.onEmailChange = this.onEmailChange.bind(this)
-    this.sendToLogin = this.sendToLogin.bind(this)
   }
 
   onFirstChange(e) {
@@ -56,10 +55,6 @@ class SignUp extends React.Component {
     })
   }
 
-  sendToLogin(){
-    this.props.history.push('/login')
-  }
-
   render() {
     if (this.props.isLoggedIn) {
       return <Redirect to='/main' />
@@ -81,7 +76,7 @@ class SignUp extends React.Component {
         <input value={this.state.email} onChange={this.onEmailChange} placeholder={'Email'}/>
         <br/>
         <br/>
-        <button onClick={this.handleClick}> Sign Me Up </button> <button onClick={this.sendToLogin}> Already a member? Log in Here</button>
+        <button onClick={this.handleClick}> Sign Me Up </button>
         </div>
         <br/>
         <br/>
