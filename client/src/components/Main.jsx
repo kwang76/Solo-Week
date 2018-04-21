@@ -5,6 +5,8 @@ import Login from './Login.jsx'
 import Search from './Search.jsx'
 import WorkoutsFeed from './WorkoutsFeed.jsx'
 import WorkoutEntry from './WorkoutEntry.jsx'
+import AppBar from 'material-ui/AppBar';
+import FlatButton from 'material-ui/FlatButton';
 
 class Main extends React.Component{
   constructor(props) {
@@ -21,6 +23,11 @@ class Main extends React.Component{
     console.log('my props', this.props.allWorkouts)
     return (
       <div>
+      <AppBar
+        title="Welcome!"
+        showMenuIconButton= {false}
+        iconElementRight={<FlatButton label="Log Out" onClick={()=> this.props.handleLogout()}/>}
+      />
       <Search exercises={this.props.exercises}
        filterMuscle={this.props.filterMuscle}
        filterType={this.props.filterType}
@@ -32,9 +39,11 @@ class Main extends React.Component{
        />
       <br/>
       <br/>
-      <WorkoutsFeed allWorkouts={this.props.allWorkouts} deleteWorkout={this.props.deleteWorkout}/>
+      <WorkoutsFeed allWorkouts={this.props.allWorkouts}
+      deleteWorkout={this.props.deleteWorkout}
+      deleteExercise={this.props.deleteExercise}
+      />
       <br/>
-      <button onClick={()=> this.props.handleLogout()}>Log Out</button>
       </div>
     )
   }
@@ -42,3 +51,4 @@ class Main extends React.Component{
 }
 
 export default Main
+      // <button onClick={()=> this.props.handleLogout()}>Log Out</button>

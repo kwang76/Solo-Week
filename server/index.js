@@ -16,6 +16,17 @@ var session = require('express-session')({
 
 app.use(session)
 
+var restrict = (req, res, next) => {
+  console.log('restricting request');
+  console.log('session: ', req.session);
+  if ((req.session !== undefined) && (req.session.user !== undefined)) {
+      console.log('authenticated user ', req.session.user)
+      next()
+  } else {
+      console.log('Errror, auth failed, redirecting to /')
+      res.redirect('/')
+  }
+}
 app.get('/isloggedin', (req, res) => {
   res.send(!!req.session && !!req.session.user)
 })
@@ -149,6 +160,7 @@ app.post('/workout', function(req, res) {
   }
 })
 
+//deletes an entire saved workout
 app.post('/deleteWorkout', function(req, res) {
   var workoutId = req.body.workoutId
   db.deleteWorkout(workoutId)
@@ -158,6 +170,20 @@ app.post('/deleteWorkout', function(req, res) {
     .catch((err) => {
       console.log('There was an error deleting a workout')
     })
+})
+
+//deletes exercise from a saved workout
+app.post('/deleteExercise', function(req, res) {
+  var workoutId = req.body.workoutId
+  var exerciseId = req.body.exerciseId
+  console.log('i am trying to delete', workoutId, exerciseId)
+  db.deleteExercise(workoutId, exerciseId)
+  .then((response) => {
+    res.status(200).send('Exercise was successfully deleted')
+  })
+  .catch((err) => {
+    console.log('There was an error deleting an exercise', err)
+  })
 })
 
 //retrieves the workout_ids and names for a user

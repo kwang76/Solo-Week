@@ -70,9 +70,9 @@ class Login extends React.Component{
     if (isLoggedIn) {
       return (<Redirect to='/main' />)
     }
-    
+
     return (
-      <div>
+      <div className="login">
         <h2> Log in to your account </h2>
         <TextField hintText="Username" floatingLabelText="Username" value={this.state.username} onChange={this.onUsernameChange}/>
         <br/>

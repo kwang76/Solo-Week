@@ -33,6 +33,7 @@ class App extends React.Component{
     this.getWorkouts = this.getWorkouts.bind(this)
     this.getStoredWorkouts = this.getStoredWorkouts.bind(this)
     this.deleteWorkout = this.deleteWorkout.bind(this)
+    this.deleteExercise = this.deleteExercise.bind(this)
   }
 
   componentDidMount() {
@@ -138,6 +139,17 @@ class App extends React.Component{
       })
   }
 
+  deleteExercise(workoutId, exerciseId) {
+    axios.post('/deleteExercise', {workoutId: workoutId, exerciseId: exerciseId})
+      .then((response)=> {
+        this.getWorkouts()
+        this.getStoredWorkouts()
+      })
+      .catch((err) => {
+        console.log('Could not delete the exercise', err)
+      })
+  }
+
   handleLogin(username, password, cb) {
     console.log('attempting to login with credentails', username, password);
     axios.post('/login', {username: username, password: password})
@@ -199,6 +211,7 @@ class App extends React.Component{
              allWorkouts={this.state.allWorkouts}
              getStoredWorkouts={this.getStoredWorkouts}
              deleteWorkout={this.deleteWorkout}
+             deleteExercise={this.deleteExercise}
             />)}/>
 
           </div>

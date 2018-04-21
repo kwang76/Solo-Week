@@ -61,6 +61,13 @@ exports.deleteWorkout = (workoutId) => {
   return connection.query('DELETE FROM workout WHERE workout_id=?',
   {replacements: [workoutId], type: 'DELETE'})
 }
+
+exports.deleteExercise = (workoutId, exerciseId) => {
+  return connection.query('DELETE FROM workout_exercises WHERE (workout_id=? AND exercise_id=?)',
+  {replacements: [workoutId, exerciseId], type: 'DELETE'})
+}
+
+
 exports.addExerciseToWorkout = (exercise, sets, reps, workoutId, workoutName) => {
   return connection.query('SELECT exercise_id FROM exercise WHERE exerciseName=?',
   {replacements: [exercise], type: 'SELECT'})

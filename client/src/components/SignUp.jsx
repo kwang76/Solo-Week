@@ -66,8 +66,8 @@ class SignUp extends React.Component {
       return (<Redirect to='/main' />)
     }
     return (
-      <div className="home">
-        <h2>Welcome to Weekly Workouts!</h2>
+      <div>
+        <div className="home" >Welcome to Weekly Workouts!</div>
         <div className="home-container">
 
           <div className="home-container-signUp">
