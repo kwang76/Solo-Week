@@ -70,7 +70,7 @@ class SignUp extends React.Component {
         <div className="home-container">
 
           <div className="home-container-signUp">
-              <h2 style={style}> Sign Up Here</h2>
+            <h2 style={style}> Sign Up Here</h2>
             <TextField
             hintText="First Name"
             floatingLabelText="First Name"

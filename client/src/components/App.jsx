@@ -115,13 +115,13 @@ class App extends React.Component{
       })
   }
 
-  createWorkout(workoutName) {
+  createWorkout(workoutName, cb) {
     axios.post('/workout', {workoutName: workoutName})
       .then((response)=> {
         this.getWorkouts()
       })
       .catch((err)=> {
-        console.log('Could not create a workout for you')
+        console.log('Could not create a workout for you', err)
       })
   }
 
@@ -135,7 +135,6 @@ class App extends React.Component{
           userId: data
         }, ()=> console.log(this.state.isLoggedIn));
         cb();
-        //am i redirecting before the state is set to true?
       })
       .catch((err)=> {
         console.log('There was an error signing in', err)

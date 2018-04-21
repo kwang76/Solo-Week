@@ -2,7 +2,15 @@ import React from 'react'
 import axios from 'axios'
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import Snackbar from 'material-ui/Snackbar';
 
+const styles ={
+  alignment: {
+    'textAlign': 'center'
+  }
+}
 class Search extends React.Component{
   constructor(props) {
     super(props)
@@ -14,6 +22,7 @@ class Search extends React.Component{
       workoutname: '',
       selectedWorkout: this.props.savedWorkouts[0],
       name: '',
+      open: false,
     }
 
     this.handleSetChange = this.handleSetChange.bind(this)
@@ -23,6 +32,7 @@ class Search extends React.Component{
     this.handleWorkoutChange = this.handleWorkoutChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.addExerciseToWorkout = this.addExerciseToWorkout.bind(this)
+    this.handleRequestClose = this.handleRequestClose.bind(this)
   }
 
   handleExerciseChange(event, index, value) {
@@ -43,29 +53,37 @@ class Search extends React.Component{
     })
   }
 
-  handleWorkoutNameChange(event, index, value){
+  handleWorkoutNameChange(e){
     this.setState({
-      workoutname: value
+      workoutname: e.target.value
     })
   }
 
   handleWorkoutChange(event, index, value) {
     let selectedWorkout = this.props.savedWorkouts.filter((workout) => {
-      if (workout.name === value) {
+      if (workout.name === value.name) {
         return workout;
       }
     })[0];
 
     this.setState({
       selectedWorkout: selectedWorkout,
-      name: e.target.value
+      name: value
     }, ()=> console.log('currently selected workout', this.state.selectedWorkout))
   }
 
   handleClick() {
+    this.setState({
+      open: true
+    })
     this.addExerciseToWorkout(this.state.exercise, this.state.sets, this.state.reps, this.state.selectedWorkout.workout_id, this.state.selectedWorkout.name)
   }
 
+  handleRequestClose() {
+    this.setState({
+      open: false,
+    })
+  }
   addExerciseToWorkout(exercise, sets, reps, workoutId, workoutName) {
     axios.post('/exerciseToWorkout', {exercise: exercise, sets:sets, reps: reps, workoutId: workoutId, workoutName: workoutName})
       .then((response)=> {
@@ -80,12 +98,31 @@ class Search extends React.Component{
     return(
       <div>
         <div className='input'>
+        <TextField
+          hintText="Create a New Workout"
+          floatingLabelText="New Workout"
+          value={this.state.workoutname}
+          onChange={this.handleWorkoutNameChange}
+        />
+        <RaisedButton label="Add a Workout"
+          onClick={()=> this.props.createWorkout(this.state.workoutname)}
+        />
+        <SelectField
+          floatingLabelText="Workouts"
+          value={this.state.name}
+          onChange={this.handleWorkoutChange}
+        >
+          {this.props.savedWorkouts.map((workout, i)=> {
+            return <MenuItem value={workout} primaryText={workout.name} key={i}/>
+          })}
+        </SelectField>
           <SelectField
-          value={this.state.exercise}
-          onChange={this.handleExerciseChange}
+            floatingLabelText="Exercise Name"
+            value={this.state.exercise}
+            onChange={this.handleExerciseChange}
           >
             {this.props.exercises.map((exercise, i)=> {
-              return <MenuItem key={i} value={exercise.exerciseName} primaryText={exercise.exerciseName}/>
+              return <MenuItem key={i} style={styles.alignment} value={exercise.exerciseName} primaryText={exercise.exerciseName}/>
             })}
           </SelectField>
           <br/>
@@ -113,44 +150,38 @@ class Search extends React.Component{
             <MenuItem value={'Stretch'} primaryText="Stretch"/>
             <MenuItem value={'Cardio'} primaryText="Cardio"/>
           </SelectField>
-
           <br/>
           <br/>
-          <label>
-            Sets
-            <select value={this.state.sets} onChange={this.handleSetChange}>
-              {[1,2,3,4,5,6,7,8,9,10].map((setAmount, i) => {
-                return <option key={i} value={setAmount}>{setAmount}</option>
-              })}
-            </select>
-          </label>
-
-          <label>
-            Repetitions
-            <select value={this.state.reps} onChange={this.handleRepChange}>
-              {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].map((repAmount, i)=> {
-                return <option key={i} value={repAmount}>{repAmount}</option>
-              })}
-            </select>
-          </label>
-        <button onClick={this.handleClick}>Add exercise to your workout</button>
-        <br/>
-        <br/>
-        <input value={this.state.workoutname} onChange={this.handleWorkoutNameChange} placeholder={'Create a New Workout'}/>
-        <button onClick={()=> this.props.createWorkout(this.state.workoutname)}>Add a Workout</button>
-
-        <br/>
-        <br/>
-        <label>
-        Select which workout to add exercise to
-          <select value={this.state.name} onChange={this.handleWorkoutChange}>
-          {this.props.savedWorkouts.map((workout, i)=> {
-            return <option key={i}>{workout.name}</option>
+          <SelectField
+          floatingLabelText="Sets"
+          value={this.state.sets}
+          onChange={this.handleSetChange}
+          >
+          {[1,2,3,4,5,6,7,8,9,10].map((setAmount, i) => {
+            return <MenuItem key={i} value={setAmount} primaryText={setAmount}/>
           })}
-          </select>
-        </label>
-        </div>
+          </SelectField>
 
+          <SelectField
+          floatingLabelText="Reps"
+          value={this.state.reps}
+          onChange={this.handleRepChange}
+          >
+          {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map((repAmount, i)=> {
+            return <MenuItem key={i} value={repAmount} primaryText={repAmount}/>
+          })}
+          </SelectField>
+        <RaisedButton
+          label="Add exerise to a workout"
+          onClick={this.handleClick}
+        />
+        <Snackbar
+          open={this.state.open}
+          message="A new exercise was added!"
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
+        </div>
       </div>
     )
   }
@@ -171,29 +202,14 @@ export default Search
 //   return acc
 // }, [])
 
-
-
-
-
-
-// <SelectField
-// value={this.state.sets}
-// onChange={this.handleSetChange}
-// >
-// {[1,2,3,4,5,6,7,8,9,10].map((setAmount, i) => {
-//   return <MenuItem key={i} value={setAmount} primaryText={setAmount}/>
-// })}
-// </SelectField>
-
-// <SelectField
-// value={this.state.reps}
-// onChange={this.handleRepChange}
-// >
-// {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map((repAmount, i)=> {
-//   return <MenuItem key={i} value={repAmount} primaryText={repAmount}/>
-// </SelectField>
-
-
+// <label>
+// Select which workout to add exercise to
+//   <select value={this.state.name} onChange={this.handleWorkoutChange}>
+//   {this.props.savedWorkouts.map((workout, i)=> {
+//     return <option key={i}>{workout.name}</option>
+//   })}
+//   </select>
+// </label>
 //FIX FILTERING, AFTER SELECTING ONE OPTION IT SHOULD BE ABLE TO RESHOW ALL OF THEM
 //FIX THE FORMAT FOR GETTING DATA BACK FOR SAVED WORKOUTS
 //MODIFY WHAT RAHUL DID WITH THE SEARCH,

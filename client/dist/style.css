@@ -12,15 +12,16 @@
   padding: 20px;
   background: white;
   margin: 20px;
+  text-align: center;
 }
 
 .workout-feed {
   float: right;
   background: #fff;
-  padding: 8px;
   border: 0;
   box-shadow: 0 1px 2px rgba(0,0,0,.1);
   margin-right: 20px;
+  width: 800px;
 }
 
 .input {
@@ -30,8 +31,10 @@
   padding: 10px;
   margin-bottom: 10px;
   text-align: center;
-  width: 30%;
   margin: 0px auto;
   background-color: white;
-  height: 800px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  width: 30%;
+  height: 600px;
 }
