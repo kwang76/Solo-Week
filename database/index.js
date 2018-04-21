@@ -30,11 +30,6 @@ exports.filterByType = (type) => {
   {replacements: [type], type: 'SELECT'})
 }
 
-// exports.getAllTypes = ()=> {
-//   return connection.query('SELECT * FROM exercise WHERE type=?',
-//   {replacements: [stretch], type: 'SELECT'})
-// }
-
 exports.getWorkouts = (username) => {
   return exports.findUser(username)
     .then((response)=> {
@@ -45,7 +40,6 @@ exports.getWorkouts = (username) => {
       return connection.query('SELECT workout_id, name FROM workout WHERE userId=?',
       {replacements:[id], type: 'SELECT'})
     })
-
 }
 
 exports.addWorkout = (username, workoutName) => {
@@ -63,6 +57,10 @@ exports.addWorkout = (username, workoutName) => {
     })
 }
 
+exports.deleteWorkout = (workoutId) => {
+  return connection.query('DELETE FROM workout WHERE workout_id=?',
+  {replacements: [workoutId], type: 'DELETE'})
+}
 exports.addExerciseToWorkout = (exercise, sets, reps, workoutId, workoutName) => {
   return connection.query('SELECT exercise_id FROM exercise WHERE exerciseName=?',
   {replacements: [exercise], type: 'SELECT'})

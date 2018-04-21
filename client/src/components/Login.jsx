@@ -66,9 +66,11 @@ class Login extends React.Component{
 
 
   render() {
-    if (this.props.isLoggedIn) {
-      return <Redirect to='/main' />
+    const {isLoggedIn} = this.props.isLoggedIn
+    if (isLoggedIn) {
+      return (<Redirect to='/main' />)
     }
+    
     return (
       <div>
         <h2> Log in to your account </h2>

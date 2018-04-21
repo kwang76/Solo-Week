@@ -2,12 +2,13 @@ import React from 'react'
 
 const WorkoutEntry = ({workout}) => {
   const style = {
-    float: 'right'
+    'fontSize': '16px',
   }
   return(
     <div>
       <label>
-      <div style={style}>{workout.length === 0 ? '' : workout[0].workoutName }</div  >
+      <br/>
+      <div style={style}> {workout.length === 0 ? '' : workout[0].workoutName} </div>
       <br/>
       {workout.map((exercise,i)=> {
         return <div key={i}>Exercise:{exercise.exercise} Sets:{exercise.sets} Repetitions:{exercise.reps}</div>

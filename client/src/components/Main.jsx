@@ -12,9 +12,12 @@ class Main extends React.Component{
   }
 
   render() {
-    if (this.props.isLoggedIn === false) {
-      return <Redirect to='/login' />
+    const {isLoggedIn} = this.props.isLoggedIn
+
+    if (isLoggedIn) {
+      return <Redirect to='/main' />
     }
+
     console.log('my props', this.props.allWorkouts)
     return (
       <div>
@@ -29,7 +32,7 @@ class Main extends React.Component{
        />
       <br/>
       <br/>
-      <WorkoutsFeed allWorkouts={this.props.allWorkouts} />
+      <WorkoutsFeed allWorkouts={this.props.allWorkouts} deleteWorkout={this.props.deleteWorkout}/>
       <br/>
       <button onClick={()=> this.props.handleLogout()}>Log Out</button>
       </div>

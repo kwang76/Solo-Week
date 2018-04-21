@@ -188,29 +188,3 @@ class Search extends React.Component{
 }
 
 export default Search
-
-// let muscles = this.props.exercises.reduce((acc, workout) => {
-//   if (!acc.includes(workout.muscleGroup)) {
-//     acc.push(workout.muscleGroup)
-//   }
-//   return acc
-// }, []);
-// let types = this.props.exercises.reduce((acc, workout)=> {
-//   if (!acc.includes(workout.type)) {
-//     acc.push(workout.type)
-//   }
-//   return acc
-// }, [])
-
-// <label>
-// Select which workout to add exercise to
-//   <select value={this.state.name} onChange={this.handleWorkoutChange}>
-//   {this.props.savedWorkouts.map((workout, i)=> {
-//     return <option key={i}>{workout.name}</option>
-//   })}
-//   </select>
-// </label>
-//FIX FILTERING, AFTER SELECTING ONE OPTION IT SHOULD BE ABLE TO RESHOW ALL OF THEM
-//FIX THE FORMAT FOR GETTING DATA BACK FOR SAVED WORKOUTS
-//MODIFY WHAT RAHUL DID WITH THE SEARCH,
-  //I THINK I CAN MODIFY THE SEARCH VALUE WITHIN SELECT TO USE AS QUERY

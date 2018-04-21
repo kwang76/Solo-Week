@@ -32,12 +32,14 @@ class App extends React.Component{
     this.createWorkout = this.createWorkout.bind(this)
     this.getWorkouts = this.getWorkouts.bind(this)
     this.getStoredWorkouts = this.getStoredWorkouts.bind(this)
+    this.deleteWorkout = this.deleteWorkout.bind(this)
   }
 
   componentDidMount() {
     this.getExercises()
     this.getWorkouts()
     this.getStoredWorkouts()
+
     console.log('checking if user is logged in')
     axios.get('/isloggedin')
     .then(({data}) => {
@@ -115,7 +117,7 @@ class App extends React.Component{
       })
   }
 
-  createWorkout(workoutName, cb) {
+  createWorkout(workoutName) {
     axios.post('/workout', {workoutName: workoutName})
       .then((response)=> {
         this.getWorkouts()
@@ -125,6 +127,16 @@ class App extends React.Component{
       })
   }
 
+  deleteWorkout(workoutId) {
+    axios.post('/deleteWorkout', {workoutId: workoutId})
+      .then((response)=> {
+        this.getWorkouts()
+        this.getStoredWorkouts()
+      })
+      .catch((err)=> {
+        console.log('Could not delete a workout for you', err)
+      })
+  }
 
   handleLogin(username, password, cb) {
     console.log('attempting to login with credentails', username, password);
@@ -133,7 +145,7 @@ class App extends React.Component{
         this.setState({
           isLoggedIn : true,
           userId: data
-        }, ()=> console.log(this.state.isLoggedIn));
+        }, ()=> console.log(this.state.isLoggedIn))
         cb();
       })
       .catch((err)=> {
@@ -147,8 +159,8 @@ class App extends React.Component{
         this.setState({
           isLoggedIn: true,
           userId: data
-        }, cb())
-
+        })
+        cb()
       })
       .catch((err)=> {
         console.log("There was an error registering user", err)
@@ -161,10 +173,9 @@ class App extends React.Component{
       console.log(res)
       this.setState({
         isLoggedIn: false
-      }, ()=> console.log('login status:', this.state.isLoggedIn));
+      })
     })
   }
-
 
   render() {
     return (
@@ -175,6 +186,7 @@ class App extends React.Component{
             <Route path='/signup' render={(props) => <SignUp {...props} isLoggedIn={this.state.isLoggedIn} handleRegister={this.handleRegister} />}/>
             <Route path='/login' render={(props) => <Login {...props}  isLoggedIn={this.state.isLoggedIn} handleLogin={this.handleLogin} />}/>
             <Route path='/main' render={(props)=> (<Main {...props}
+             isLoggedIn={this.state.isLoggedIn}
              savedWorkouts={this.state.savedWorkouts}
              handleLogout={this.handleLogout}
              exercises={this.state.exercises}
@@ -186,6 +198,7 @@ class App extends React.Component{
              handleLogout={this.handleLogout}
              allWorkouts={this.state.allWorkouts}
              getStoredWorkouts={this.getStoredWorkouts}
+             deleteWorkout={this.deleteWorkout}
             />)}/>
 
           </div>

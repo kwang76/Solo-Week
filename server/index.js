@@ -149,6 +149,17 @@ app.post('/workout', function(req, res) {
   }
 })
 
+app.post('/deleteWorkout', function(req, res) {
+  var workoutId = req.body.workoutId
+  db.deleteWorkout(workoutId)
+    .then((response) => {
+      res.status(200).send('Workout was successfully deleted')
+    })
+    .catch((err) => {
+      console.log('There was an error deleting a workout')
+    })
+})
+
 //retrieves the workout_ids and names for a user
 app.get('/getWorkouts', function(req, res) {
   var username = req.session.user
