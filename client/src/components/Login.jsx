@@ -3,6 +3,12 @@ import axios from 'axios'
 import { Redirect, Route, Link, Switch } from 'react-router-dom'
 import SignUp from './SignUp.jsx'
 import Main from './Main.jsx'
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+
+const loginbutton = {
+  width: '260px'
+}
 
 class Login extends React.Component{
   constructor(props) {
@@ -65,14 +71,16 @@ class Login extends React.Component{
     }
     return (
       <div>
-        <h2> Log In </h2>
-        <input value={this.state.username} onChange={this.onUsernameChange} placeholder={'Username'}/>
+        <h2> Log in to your account </h2>
+        <TextField hintText="Username" floatingLabelText="Username" value={this.state.username} onChange={this.onUsernameChange}/>
+        <br/>
+        <TextField hintText="Password" floatingLabelText="Password" value={this.state.password} onChange={this.onPasswordChange} onKeyPress={this.handleKeyPress}/>
         <br/>
         <br/>
-        <input value={this.state.password} onChange={this.onPasswordChange} onKeyPress={this.handleKeyPress} placeholder={'Password'} />
+        <RaisedButton label="Login" style={loginbutton} onClick={this.handleClick} />
         <br/>
         <br/>
-        <button onClick={this.handleClick}>Login</button> <button onClick={this.handleSignUp}> New to us? Sign Up Here!</button>
+        <RaisedButton label="New to us? Sign Up Here!" style={loginbutton} onClick={this.handleSignUp}/>
       </div>
     )
   }

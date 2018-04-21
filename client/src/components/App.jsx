@@ -68,7 +68,7 @@ class App extends React.Component{
         this.setState({
           exercises: response.data,
           muscle: muscle
-        })
+        }, ()=> console.log('my current muscle', this.state.exercises))
       })
       .catch((err) => {
         console.log('Error filtering by muscle', err)
@@ -172,10 +172,10 @@ class App extends React.Component{
       <div>
         <Router>
           <div>
-            <Route exact={true} path='/' component={(props)=><Redirect {...props} to='/login'/>}/>
-            <Route path='/signup' component={(props) => <SignUp {...props} isLoggedIn={this.state.isLoggedIn} handleRegister={this.handleRegister} />}/>
-            <Route path='/login' component={(props) => <Login {...props}  isLoggedIn={this.state.isLoggedIn} handleLogin={this.handleLogin} />}/>
-            <Route path='/main' component={(props)=> <Main {...props}
+            <Route exact={true} path='/' render={(props)=> (<Redirect {...props} to='/login'/>)}/>
+            <Route path='/signup' render={(props) => <SignUp {...props} isLoggedIn={this.state.isLoggedIn} handleRegister={this.handleRegister} />}/>
+            <Route path='/login' render={(props) => <Login {...props}  isLoggedIn={this.state.isLoggedIn} handleLogin={this.handleLogin} />}/>
+            <Route path='/main' render={(props)=> (<Main {...props}
              savedWorkouts={this.state.savedWorkouts}
              handleLogout={this.handleLogout}
              exercises={this.state.exercises}
@@ -187,7 +187,7 @@ class App extends React.Component{
              handleLogout={this.handleLogout}
              allWorkouts={this.state.allWorkouts}
              getStoredWorkouts={this.getStoredWorkouts}
-            />}/>
+            />)}/>
 
           </div>
         </Router>

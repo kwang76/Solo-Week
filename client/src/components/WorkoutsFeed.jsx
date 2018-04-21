@@ -3,9 +3,7 @@ import WorkoutEntry from './WorkoutEntry.jsx'
 
 const WorkoutsFeed = ({allWorkouts}) => {
   return(
-    <div>
-
-
+    <div className="workout-feed">
     {allWorkouts.map((workout,i)=> {
       return (<div key={i}>
         <WorkoutEntry key={i} workout={workout}/><br/>

@@ -1,5 +1,7 @@
 import React from 'react'
 import axios from 'axios'
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 class Search extends React.Component{
   constructor(props) {
@@ -23,33 +25,33 @@ class Search extends React.Component{
     this.addExerciseToWorkout = this.addExerciseToWorkout.bind(this)
   }
 
-  handleExerciseChange(e) {
+  handleExerciseChange(event, index, value) {
     this.setState({
-      exercise: e.target.value
+      exercise: value
     })
   }
 
-  handleSetChange(e) {
+  handleSetChange(event, index, value) {
     this.setState({
-      sets: e.target.value
+      sets: value
     })
   }
 
-  handleRepChange(e) {
+  handleRepChange(event, index, value) {
     this.setState({
-      reps: e.target.value
+      reps: value
     })
   }
 
-  handleWorkoutNameChange(e){
+  handleWorkoutNameChange(event, index, value){
     this.setState({
-      workoutname: e.target.value
+      workoutname: value
     })
   }
 
-  handleWorkoutChange(e) {
+  handleWorkoutChange(event, index, value) {
     let selectedWorkout = this.props.savedWorkouts.filter((workout) => {
-      if (workout.name === e.target.value) {
+      if (workout.name === value) {
         return workout;
       }
     })[0];
@@ -77,65 +79,66 @@ class Search extends React.Component{
   render() {
     return(
       <div>
-        <label>
-          Exercises
-          <select value={this.state.exercise} onChange={this.handleExerciseChange}>
+        <div className='input'>
+          <SelectField
+          value={this.state.exercise}
+          onChange={this.handleExerciseChange}
+          >
             {this.props.exercises.map((exercise, i)=> {
-              return <option key={i} value={exercise.exerciseName}>{exercise.exerciseName}</option>
+              return <MenuItem key={i} value={exercise.exerciseName} primaryText={exercise.exerciseName}/>
             })}
-          </select>
-        </label>
+          </SelectField>
+          <br/>
+          <SelectField
+          floatingLabelText="Muscle group"
+          value={this.props.muscle}
+          onChange={(e,i,value)=> this.props.filterMuscle(value)}
+          >
+            <MenuItem value={'All'} primaryText="All"/>
+            <MenuItem value={'Chest'} primaryText="Chest"/>
+            <MenuItem value={'Back'} primaryText="Back"/>
+            <MenuItem value={'Shoulder'} primaryText="Shoulders"/>
+            <MenuItem value={'Biceps'} primaryText="Biceps"/>
+            <MenuItem value={'Triceps'} primaryText="Triceps"/>
+            <MenuItem value={'Legs'} primaryText="Legs"/>
+          </SelectField>
+          <br/>
+          <SelectField
+          floatingLabelText="Exercise Type"
+          value={this.props.type}
+          onChange={(e,i,v)=> this.props.filterType(v)}
+          >
+            <MenuItem value={'All'} primaryText="All"/>
+            <MenuItem value={'Strength'} primaryText="Strength"/>
+            <MenuItem value={'Stretch'} primaryText="Stretch"/>
+            <MenuItem value={'Cardio'} primaryText="Cardio"/>
+          </SelectField>
 
-        <label>
-          Muscle Group
-          <select value={this.props.muscle} onChange={(e)=> this.props.filterMuscle(e.target.value)}>
-            <option>All</option>
-            <option>Chest</option>
-            <option>Back</option>
-            <option>Shoulders</option>
-            <option>Biceps</option>
-            <option>Triceps</option>
-            <option>Legs</option>
-          </select>
-        </label>
+          <br/>
+          <br/>
+          <label>
+            Sets
+            <select value={this.state.sets} onChange={this.handleSetChange}>
+              {[1,2,3,4,5,6,7,8,9,10].map((setAmount, i) => {
+                return <option key={i} value={setAmount}>{setAmount}</option>
+              })}
+            </select>
+          </label>
 
-        <label>
-          Exercise Type
-          <select value={this.props.type} onChange={(e)=> this.props.filterType(e.target.value)}>
-            <option>All</option>
-            <option>Strength</option>
-            <option>Stretch</option>
-            <option>Cardio</option>
-          </select>
-        </label>
-
-        <br/>
-        <br/>
-        <label>
-          Sets
-          <select value={this.state.sets} onChange={this.handleSetChange}>
-            {[1,2,3,4,5,6,7,8,9,10].map((setAmount, i) => {
-              return <option key={i} value={setAmount}>{setAmount}</option>
-            })}
-          </select>
-        </label>
-
-        <label>
-          Repetitions
-          <select value={this.state.reps} onChange={this.handleRepChange}>
-            {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].map((repAmount, i)=> {
-              return <option key={i} value={repAmount}>{repAmount}</option>
-            })}
-          </select>
-        </label>
-
-        <br/>
-        <br/>
+          <label>
+            Repetitions
+            <select value={this.state.reps} onChange={this.handleRepChange}>
+              {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].map((repAmount, i)=> {
+                return <option key={i} value={repAmount}>{repAmount}</option>
+              })}
+            </select>
+          </label>
         <button onClick={this.handleClick}>Add exercise to your workout</button>
         <br/>
         <br/>
         <input value={this.state.workoutname} onChange={this.handleWorkoutNameChange} placeholder={'Create a New Workout'}/>
         <button onClick={()=> this.props.createWorkout(this.state.workoutname)}>Add a Workout</button>
+
         <br/>
         <br/>
         <label>
@@ -146,6 +149,7 @@ class Search extends React.Component{
           })}
           </select>
         </label>
+        </div>
 
       </div>
     )
@@ -168,13 +172,28 @@ export default Search
 // }, [])
 
 
-// {muscles.map((muscle, i)=> {
-//   return <option key={i}>{muscle}</option>
-// })}
 
-// {types.map((type, i)=> {
-//   return <option key={i}>{type}</option>
+
+
+
+// <SelectField
+// value={this.state.sets}
+// onChange={this.handleSetChange}
+// >
+// {[1,2,3,4,5,6,7,8,9,10].map((setAmount, i) => {
+//   return <MenuItem key={i} value={setAmount} primaryText={setAmount}/>
 // })}
+// </SelectField>
+
+// <SelectField
+// value={this.state.reps}
+// onChange={this.handleRepChange}
+// >
+// {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map((repAmount, i)=> {
+//   return <MenuItem key={i} value={repAmount} primaryText={repAmount}/>
+// </SelectField>
+
+
 //FIX FILTERING, AFTER SELECTING ONE OPTION IT SHOULD BE ABLE TO RESHOW ALL OF THEM
 //FIX THE FORMAT FOR GETTING DATA BACK FOR SAVED WORKOUTS
 //MODIFY WHAT RAHUL DID WITH THE SEARCH,

@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom'
 import { Redirect, Route, Link, Switch } from 'react-router-dom';
 import Main from './Main.jsx'
 import Login from './Login.jsx'
+import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton';
 
+const style ={
+  color: '#1DA1F2'
+}
 class SignUp extends React.Component {
   constructor(props) {
     super(props)
@@ -60,28 +65,45 @@ class SignUp extends React.Component {
       return <Redirect to='/main' />
     }
     return (
-      <div>
+      <div className="home">
         <h2>Welcome to Weekly Workouts!</h2>
-        <div>
-        <input value={this.state.firstName} onChange={this.onFirstChange} placeholder={'First Name'} />
-        <input value={this.state.lastName} onChange={this.onLastChange} placeholder={'Last Name'} />
-        <br/>
-        <br/>
-        <input value={this.state.username} onChange={this.onUserChange} placeholder={'Username'} />
-        <br/>
-        <br/>
-        <input value={this.state.password} onChange={this.onPasswordChange} placeholder={'Password'} />
-        <br/>
-        <br/>
-        <input value={this.state.email} onChange={this.onEmailChange} placeholder={'Email'}/>
-        <br/>
-        <br/>
-        <button onClick={this.handleClick}> Sign Me Up </button>
-        </div>
-        <br/>
-        <br/>
-        <br/>
+        <div className="home-container">
 
+          <div className="home-container-signUp">
+              <h2 style={style}> Sign Up Here</h2>
+            <TextField
+            hintText="First Name"
+            floatingLabelText="First Name"
+            value={this.state.firstName} onChange={this.onFirstChange}
+            />
+            <TextField
+            hintText="Last Name"
+            floatingLabelText="Last Name"
+            value={this.state.lastName} onChange={this.onLastChange}
+            />
+            <br/>
+            <TextField
+            hintText="Username"
+            floatingLabelText="Username"
+            value={this.state.username} onChange={this.onUserChange}
+            />
+            <br/>
+            <TextField
+            hintText="Password"
+            floatingLabelText="Password"
+            value={this.state.password} onChange={this.onPasswordChange}
+            />
+            <br/>
+            <TextField
+            hintText="@Email"
+            floatingLabelText="Email"
+            value={this.state.email} onChange={this.onEmailChange}
+            />
+            <br/>
+            <br/>
+            <RaisedButton label="Sign Me Up!" onClick={this.handleClick}/>
+          </div>
+        </div>
       </div>
     )
 
