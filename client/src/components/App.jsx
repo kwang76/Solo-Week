@@ -17,10 +17,10 @@ class App extends React.Component{
       isLoggedIn: false,
       exercises: [],
       savedWorkouts: [],
+      allWorkouts: [],
+      userId: '',
       muscle: '',
       type: '',
-      userId: '',
-      allWorkouts: [],
     }
 
     this.handleRegister = this.handleRegister.bind(this)

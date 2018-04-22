@@ -17,14 +17,12 @@ var session = require('express-session')({
 app.use(session)
 
 var restrict = (req, res, next) => {
-  console.log('restricting request');
-  console.log('session: ', req.session);
   if ((req.session !== undefined) && (req.session.user !== undefined)) {
-      console.log('authenticated user ', req.session.user)
-      next()
+    console.log('authenticated user ', req.session.user)
+    next()
   } else {
-      console.log('Errror, auth failed, redirecting to /')
-      res.redirect('/')
+    console.log('Errror, auth failed, redirecting to /')
+    res.redirect('/')
   }
 }
 app.get('/isloggedin', (req, res) => {
@@ -130,7 +128,6 @@ app.post('/logout', (req, res) => {
 app.get('/exercises', function(req, res) {
   db.getExercises()
     .then((response)=> {
-      // console.log('my response from getting workouts', response)
       res.send(response)
     })
     .catch((err) =>{
@@ -141,8 +138,8 @@ app.get('/exercises', function(req, res) {
 
 //adds a workout to the database
 app.post('/workout', function(req, res) {
-  var workoutName = req.body.workoutName
-  var username = req.session.user
+  let workoutName = req.body.workoutName
+  let username = req.session.user
   console.log('requested workoutname',req.body.workoutName)
   console.log('in server my username is', req.session.user)
   if (req.body.workoutName.length === 0) {
@@ -151,7 +148,6 @@ app.post('/workout', function(req, res) {
     db.addWorkout(username, workoutName)
     .then((response)=> {
       console.log('my response from making a workout', response)
-      //sends back a workout_id and name so it can be retrieved later
       res.send(JSON.stringify({userId: response[0], workoutName: workoutName}))
     })
     .catch((err)=> {
@@ -162,7 +158,7 @@ app.post('/workout', function(req, res) {
 
 //deletes an entire saved workout
 app.post('/deleteWorkout', function(req, res) {
-  var workoutId = req.body.workoutId
+  let workoutId = req.body.workoutId
   db.deleteWorkout(workoutId)
     .then((response) => {
       res.status(200).send('Workout was successfully deleted')
@@ -174,8 +170,8 @@ app.post('/deleteWorkout', function(req, res) {
 
 //deletes exercise from a saved workout
 app.post('/deleteExercise', function(req, res) {
-  var workoutId = req.body.workoutId
-  var exerciseId = req.body.exerciseId
+  let workoutId = req.body.workoutId
+  let exerciseId = req.body.exerciseId
   console.log('i am trying to delete', workoutId, exerciseId)
   db.deleteExercise(workoutId, exerciseId)
   .then((response) => {
@@ -188,7 +184,7 @@ app.post('/deleteExercise', function(req, res) {
 
 //retrieves the workout_ids and names for a user
 app.get('/getWorkouts', function(req, res) {
-  var username = req.session.user
+  let username = req.session.user
   db.getWorkouts(username)
     .then((response)=> {
       console.log('RESPONSE FROM GETTING THE SAVED WORKOUTS', response)
@@ -200,11 +196,11 @@ app.get('/getWorkouts', function(req, res) {
 })
 //adds an exercise to a specific workout
 app.post('/exerciseToWorkout', function(req, res){
-  var exercise = req.body.exercise
-  var sets = req.body.sets
-  var reps = req.body.reps
-  var workoutId = req.body.workoutId
-  var workoutName = req.body.workoutName
+  let exercise = req.body.exercise
+  let sets = req.body.sets
+  let reps = req.body.reps
+  let workoutId = req.body.workoutId
+  let workoutName = req.body.workoutName
   console.log('my post body from adding exercise', req.body)
   db.addExerciseToWorkout(exercise, sets, reps, workoutId, workoutName)
     .then((response)=> {
@@ -215,7 +211,7 @@ app.post('/exerciseToWorkout', function(req, res){
 
 //retrieves all workouts for a user
 app.get('/storedWorkouts', function(req, res) {
-  var username = req.session.user
+  let username = req.session.user
   db.getStoredWorkouts(username)
     .then((response)=> {
       console.log('RESPONSE FROM GETTING WORKOUTS WITH EXERCISES', response)
@@ -232,7 +228,7 @@ app.get('/storedWorkouts', function(req, res) {
 
 //filters the exercises by selected muscle
 app.post('/muscle', function(req, res) {
-  var muscle = req.body.muscle
+  let muscle = req.body.muscle
   if (muscle === 'All') {
     db.getExercises()
       .then((response)=> {
@@ -251,7 +247,13 @@ app.post('/muscle', function(req, res) {
 
 //filters the exercises by selected muscle type
 app.post('/type', function(req, res) {
-  var type = req.body.type
+  let type = req.body.type
+  if (type === 'All') {
+    db.getExercises()
+      .then((response)=> {
+        res.send(response)
+      })
+  } else {
   db.filterByType(type)
     .then((response) => {
       res.send(response)
@@ -259,6 +261,7 @@ app.post('/type', function(req, res) {
     .catch((err) => {
       console.log('Error filtering by type in server', err)
     })
+  }
 })
 
 app.get('/*', (req, res) => {

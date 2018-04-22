@@ -18,6 +18,7 @@ class Login extends React.Component{
       username: '',
       password: '',
     }
+
     this.handleLogin = props.handleLogin
     this.onUsernameChange = this.onUsernameChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
@@ -64,7 +65,6 @@ class Login extends React.Component{
     this.props.history.push('/signup')
   }
 
-
   render() {
     const {isLoggedIn} = this.props.isLoggedIn
     if (isLoggedIn) {
@@ -86,8 +86,6 @@ class Login extends React.Component{
       </div>
     )
   }
-
-
 }
 
 export default Login

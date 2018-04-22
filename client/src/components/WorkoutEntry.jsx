@@ -20,11 +20,8 @@ const WorkoutEntry = ({workout, deleteExercise}) => {
         </div>
       })}
       </label>
-
-
     </div>
   )
-
 }
 
 export default WorkoutEntry

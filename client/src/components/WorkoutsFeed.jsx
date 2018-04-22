@@ -3,10 +3,8 @@ import WorkoutEntry from './WorkoutEntry.jsx'
 import RaisedButton from 'material-ui/RaisedButton';
 
 const WorkoutsFeed = ({allWorkouts, deleteWorkout, deleteExercise}) => {
-
   console.log('all of a users workouts', allWorkouts)
   return(
-
     <div className="workout-feed">
     <h2> Workouts </h2>
     {allWorkouts.map((workout,i)=> {
@@ -17,7 +15,6 @@ const WorkoutsFeed = ({allWorkouts, deleteWorkout, deleteExercise}) => {
         <br/>
         </div>)
     })}
-
     </div>
   )
 }
