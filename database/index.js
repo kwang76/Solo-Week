@@ -2,7 +2,8 @@ const mysql = require('mysql')
 const mysqlConfig = require('./config.js')
 const Sequelize = require('sequelize')
 
-connection = new Sequelize('heroku_ba26fb2fee70382', 'b8f7c4ede32d88', '640671e4', mysqlConfig)
+// const connection = new Sequelize('heroku_ba26fb2fee70382', 'b8f7c4ede32d88', '640671e4', mysqlConfig)
+const connection = new Sequelize('mysql://b8f7c4ede32d88:640671e4@us-cdbr-iron-east-05.cleardb.net/heroku_ba26fb2fee70382?reconnect=true')
 
 exports.connection = connection
 

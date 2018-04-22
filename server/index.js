@@ -135,7 +135,7 @@ app.get('/exercises', function(req, res) {
     })
     .catch((err) =>{
       console.log('Error in getting exercises in server', err)
-      res.send(err)
+      res.send('failed')
     })
 })
 
