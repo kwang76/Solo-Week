@@ -2,7 +2,9 @@ const mysql = require('mysql')
 const mysqlConfig = require('./config.js')
 const Sequelize = require('sequelize')
 
-connection = new Sequelize('workoutworld', 'root', '', mysqlConfig)
+connection = new Sequelize('heroku_ba26fb2fee70382', 'b8f7c4ede32d88', '640671e4', {
+  dialect: 'mysql'
+})
 
 exports.connection = connection
 
